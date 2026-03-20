@@ -150,6 +150,25 @@ export const accountActions = [
   { title: "Support", subtitle: "Get help with your account and checkout" },
 ];
 
+export const drawerItems = [
+  "Order History",
+  "Support",
+  "Review",
+  "Help",
+  "About Us",
+  "Logout",
+];
+
+export const offerTabs = [
+  "Free Delivery",
+  "Flash Sell",
+  "Buy Get",
+  "Must Buy",
+  "Best Price",
+  "Mega Discount",
+  "Free Gift",
+];
+
 export const homeHighlights = [
   "Fast delivery across major cities",
   "Original product-focused shopping flow from your existing app",

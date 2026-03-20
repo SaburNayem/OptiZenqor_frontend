@@ -4,10 +4,12 @@ import {
   accountActions,
   cartSeed,
   categories,
+  drawerItems,
   favoriteSeed,
   featuredProducts,
   getProductById,
   getProductsByCategory,
+  offerTabs,
   popularProducts,
   products,
 } from "./data";
@@ -16,6 +18,7 @@ const headerLinks = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
   { to: "/categories", label: "Categories" },
+  { to: "/offers", label: "Offers" },
   { to: "/favorites", label: "Favorites" },
   { to: "/cart", label: "Cart" },
   { to: "/account", label: "Account" },
@@ -102,6 +105,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<WebsiteLayout favorites={favorites} cart={cart} />}>
+        <Route path="offers" element={<OffersPage addToCart={addToCart} favorites={favorites} toggleFavorite={toggleFavorite} />} />
+        <Route path="info/:slug" element={<DrawerInfoPage />} />
         <Route
           index
           element={
@@ -167,10 +172,13 @@ function App() {
 }
 
 function WebsiteLayout({ favorites, cart }) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
     <div className="site-shell">
       <TopStrip />
-      <SiteHeader favorites={favorites} cart={cart} />
+      <SiteHeader favorites={favorites} cart={cart} onOpenDrawer={() => setDrawerOpen(true)} />
+      <WebDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <main className="site-main">
         <Outlet />
       </main>
@@ -190,7 +198,7 @@ function TopStrip() {
   );
 }
 
-function SiteHeader({ favorites, cart }) {
+function SiteHeader({ favorites, cart, onOpenDrawer }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -225,6 +233,9 @@ function SiteHeader({ favorites, cart }) {
           </form>
 
           <div className="header-actions">
+            <button className="button ghost small" type="button" onClick={onOpenDrawer}>
+              Menu
+            </button>
             <Link className="header-stat" to="/favorites">
               Favorites
               <strong>{favorites.length}</strong>
@@ -308,6 +319,16 @@ function HomePage({ favorites, toggleFavorite, addToCart }) {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="section-block">
+        <div className="container promo-ribbon">
+          {offerTabs.slice(0, 4).map((tab) => (
+            <Link key={tab} className="promo-chip" to="/offers">
+              {tab}
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -489,6 +510,65 @@ function CategoriesPage() {
             <strong>{category.bannerTitle}</strong>
             <small>View products</small>
           </Link>
+        ))}
+      </div>
+    </PageSection>
+  );
+}
+
+function OffersPage({ addToCart, favorites, toggleFavorite }) {
+  const [activeTab, setActiveTab] = useState(offerTabs[0]);
+  const favoriteIds = favorites.map((item) => item.id);
+  const offerProducts = useMemo(() => {
+    const offset = offerTabs.indexOf(activeTab);
+    return products.map((product, index) => ({
+      ...product,
+      offerLabel: offerTabs[(index + Math.max(offset, 0)) % offerTabs.length],
+    }));
+  }, [activeTab]);
+
+  return (
+    <PageSection
+      eyebrow="Offers"
+      title="Deals, tabs, and promotional collections from your original app"
+      subtitle="This restores the offers section in a website-friendly form with tabs and animated cards."
+    >
+      <div className="offers-tabs">
+        {offerTabs.map((tab) => (
+          <button
+            key={tab}
+            className={`offer-tab${activeTab === tab ? " active" : ""}`}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+      <div className="offer-list">
+        {offerProducts.map((product) => (
+          <article className="offer-card" key={`${activeTab}-${product.id}`}>
+            <img src={product.imageUrl} alt={product.name} />
+            <div className="offer-card-body">
+              <span className="offer-badge">{product.offerLabel}</span>
+              <Link className="product-title" to={`/product/${product.id}`}>
+                {product.name}
+              </Link>
+              <p>{product.categoryName}</p>
+              <div className="price-row">
+                <strong>${product.price.toFixed(2)}</strong>
+                <span>{product.rating}★</span>
+              </div>
+              <div className="card-actions">
+                <button className="button ghost small" type="button" onClick={() => toggleFavorite(product)}>
+                  {favoriteIds.includes(product.id) ? "Saved" : "Save"}
+                </button>
+                <button className="button primary small" type="button" onClick={() => addToCart(product, 1)}>
+                  Add
+                </button>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
     </PageSection>
@@ -824,6 +904,91 @@ function AccountPage() {
   );
 }
 
+function DrawerInfoPage() {
+  const { slug } = useParams();
+  const page = slug ?? "";
+  const decoded = page
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+  const sampleOrders = [
+    { id: "#123456", date: "March 8, 2025", status: "Delivered", amount: "$20.00", product: featuredProducts[0] },
+    { id: "#123457", date: "March 5, 2025", status: "Cancelled", amount: "$20.00", product: featuredProducts[1] },
+    { id: "#123458", date: "March 1, 2025", status: "Processing", amount: "$35.00", product: popularProducts[2] },
+  ];
+
+  if (decoded === "Order History") {
+    return (
+      <PageSection eyebrow="Drawer Section" title="Order History" subtitle="Grouped order history similar to the original drawer page.">
+        <div className="orders-grid">
+          {sampleOrders.map((order) => (
+            <Link className="order-card" key={order.id} to={`/product/${order.product.id}`}>
+              <img src={order.product.imageUrl} alt={order.product.name} />
+              <div>
+                <h3>{order.product.name}</h3>
+                <p>{order.id}</p>
+                <p>{order.date}</p>
+                <div className="price-row">
+                  <span className={`status-badge status-${order.status.toLowerCase()}`}>{order.status}</span>
+                  <strong>{order.amount}</strong>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </PageSection>
+    );
+  }
+
+  const infoContent = {
+    Support: {
+      title: "Support",
+      body: "Talk to our support team about orders, payment, delivery, or product issues. This restores the support destination from your drawer flow.",
+    },
+    Review: {
+      title: "Review",
+      body: "Share your experience with recent products and help improve the storefront. This page stands in for the review section from the app.",
+    },
+    Help: {
+      title: "Help",
+      body: "Browse quick answers about ordering, returns, payments, delivery windows, and account usage.",
+    },
+    "About Us": {
+      title: "About Us",
+      body: "Shob Bazaar is presented here as a polished ecommerce storefront that keeps the same app content while shifting it into a more modern web experience.",
+    },
+    Logout: {
+      title: "Logout",
+      body: "Use the sign in page to re-enter the storefront after leaving your account session.",
+    },
+  };
+
+  const data = infoContent[decoded] ?? {
+    title: decoded || "Info",
+    body: "This page restores one of the original drawer destinations.",
+  };
+
+  return (
+    <PageSection eyebrow="Drawer Section" title={data.title} subtitle={data.body}>
+      <div className="info-panel-grid">
+        <div className="summary-box">
+          <h3>{data.title}</h3>
+          <p>{data.body}</p>
+        </div>
+        <div className="summary-box">
+          <h3>Quick Actions</h3>
+          <Link className="button primary full-width" to="/shop">
+            Continue Shopping
+          </Link>
+          <Link className="button ghost full-width" to="/account">
+            Open Account
+          </Link>
+        </div>
+      </div>
+    </PageSection>
+  );
+}
+
 function AuthPage({ mode }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -974,6 +1139,49 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function WebDrawer({ open, onClose }) {
+  const navigate = useNavigate();
+
+  return (
+    <div className={`drawer-overlay${open ? " open" : ""}`} onClick={onClose}>
+      <aside className={`web-drawer${open ? " open" : ""}`} onClick={(event) => event.stopPropagation()}>
+        <div className="drawer-top">
+          <div className="brand-mark">
+            <span className="brand-badge">SQ</span>
+            <span>
+              <strong>Shob Bazaar</strong>
+              <small>Drawer restored as a web panel</small>
+            </span>
+          </div>
+          <button className="icon-button" type="button" onClick={onClose}>
+            x
+          </button>
+        </div>
+        <div className="drawer-list">
+          {drawerItems.map((item) => (
+            <button
+              key={item}
+              className="drawer-link"
+              type="button"
+              onClick={() => {
+                onClose();
+                if (item === "Logout") {
+                  navigate("/sign-in");
+                  return;
+                }
+                navigate(`/info/${item.toLowerCase().replace(/\s+/g, "-")}`);
+              }}
+            >
+              <span>{item}</span>
+              <small>Open page</small>
+            </button>
+          ))}
+        </div>
+      </aside>
+    </div>
   );
 }
 

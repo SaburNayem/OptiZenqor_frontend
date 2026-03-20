@@ -6,3 +6,11 @@ export function loadStoredValue(key, fallback) {
     return fallback;
   }
 }
+
+export function storeValue(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Ignore write failures and keep the UI usable.
+  }
+}

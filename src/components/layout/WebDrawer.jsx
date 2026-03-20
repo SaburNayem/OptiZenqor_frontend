@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { drawerItems } from "../../data";
+import { drawerItems } from "../../data/mockStorefront";
 
 function WebDrawer({ open, onClose }) {
   const navigate = useNavigate();
@@ -22,19 +22,19 @@ function WebDrawer({ open, onClose }) {
         <div className="drawer-list">
           {drawerItems.map((item) => (
             <button
-              key={item}
+              key={item.slug}
               className="drawer-link"
               type="button"
               onClick={() => {
                 onClose();
-                if (item === "Logout") {
+                if (item.slug === "logout") {
                   navigate("/sign-in");
                   return;
                 }
-                navigate(`/info/${item.toLowerCase().replace(/\s+/g, "-")}`);
+                navigate(`/info/${item.slug}`);
               }}
             >
-              <span>{item}</span>
+              <span>{item.label}</span>
               <small>Open page</small>
             </button>
           ))}

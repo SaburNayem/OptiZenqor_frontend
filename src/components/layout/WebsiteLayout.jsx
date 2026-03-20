@@ -5,13 +5,13 @@ import SiteHeader from "./SiteHeader";
 import TopStrip from "./TopStrip";
 import WebDrawer from "./WebDrawer";
 
-function WebsiteLayout({ favorites, cart }) {
+function WebsiteLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <div className="site-shell">
       <TopStrip />
-      <SiteHeader favorites={favorites} cart={cart} onOpenDrawer={() => setDrawerOpen(true)} />
+      <SiteHeader onOpenDrawer={() => setDrawerOpen(true)} />
       <WebDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <main className="site-main">
         <Outlet />

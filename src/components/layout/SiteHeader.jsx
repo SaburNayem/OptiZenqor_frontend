@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { headerLinks } from "../../constants/navigation";
+import { useCart } from "../../features/cart/hooks/useCart";
+import { useFavorites } from "../../features/favorites/hooks/useFavorites";
 
-function SiteHeader({ favorites, cart, onOpenDrawer }) {
+function SiteHeader({ onOpenDrawer }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const { cartCount } = useCart();
+  const { favoritesCount } = useFavorites();
 
   function submitSearch(event) {
     event.preventDefault();
@@ -42,11 +45,11 @@ function SiteHeader({ favorites, cart, onOpenDrawer }) {
             </button>
             <Link className="header-stat" to="/favorites">
               Favorites
-              <strong>{favorites.length}</strong>
+              <strong>{favoritesCount}</strong>
             </Link>
             <Link className="header-stat" to="/cart">
               Cart
-              <strong>{cartItemCount}</strong>
+              <strong>{cartCount}</strong>
             </Link>
             <Link className="button ghost small" to="/sign-in">
               Sign In

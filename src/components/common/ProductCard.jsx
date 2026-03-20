@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../../features/cart/hooks/useCart";
+import { useFavorites } from "../../features/favorites/hooks/useFavorites";
 
-function ProductCard({ product, favoriteIds, onFavorite, onAddToCart }) {
-  const isFavorite = favoriteIds.includes(product.id);
+function ProductCard({ product }) {
+  const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const saved = isFavorite(product.id);
 
   return (
     <article className="product-card">
@@ -19,10 +23,10 @@ function ProductCard({ product, favoriteIds, onFavorite, onAddToCart }) {
         </div>
       </div>
       <div className="card-actions">
-        <button className="button ghost small" type="button" onClick={onFavorite}>
-          {isFavorite ? "Saved" : "Save"}
+        <button className="button ghost small" type="button" onClick={() => toggleFavorite(product)}>
+          {saved ? "Saved" : "Save"}
         </button>
-        <button className="button primary small" type="button" onClick={onAddToCart}>
+        <button className="button primary small" type="button" onClick={() => addToCart(product, 1)}>
           Add
         </button>
       </div>

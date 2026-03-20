@@ -27,3 +27,21 @@ export const editorialCards = [
     link: "/categories/beauty_personal_care",
   },
 ];
+
+export const sourcingActions = [
+  {
+    title: "Request for Quotation",
+    body: "Post a product need and compare multiple matching offers fast.",
+    link: "/offers",
+  },
+  {
+    title: "Order Protection",
+    body: "Clear delivery, payment, and support trust signals across the storefront.",
+    link: "/account",
+  },
+  {
+    title: "Top Ranking",
+    body: "Browse bestselling picks and fast-moving collections by interest.",
+    link: "/shop",
+  },
+];

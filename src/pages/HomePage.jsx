@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { editorialCards, trustPoints } from "../constants/navigation";
-import { categories, featuredProducts, offerTabs, popularProducts } from "../data";
+import { editorialCards, sourcingActions, trustPoints } from "../constants/navigation";
+import { categories, featuredProducts, offerTabs, popularProducts, products } from "../data";
 import ProductCard from "../components/common/ProductCard";
 import SectionHeading from "../components/common/SectionHeading";
 
 function HomePage({ favorites, toggleFavorite, addToCart }) {
   const favoriteIds = favorites.map((item) => item.id);
+  const buyAgainProducts = favorites.length ? favorites : products.slice(0, 4);
 
   return (
     <>
@@ -60,6 +61,34 @@ function HomePage({ favorites, toggleFavorite, addToCart }) {
       </section>
 
       <section className="section-block">
+        <div className="container sourcing-grid">
+          <article className="sourcing-panel">
+            <p className="eyebrow">Search-First Discovery</p>
+            <h2>Browse fast by category, trend, or deal.</h2>
+            <p>
+              This section borrows from large marketplace behavior: dense category access,
+              trust shortcuts, and a strong “start with search” flow.
+            </p>
+            <div className="sourcing-categories">
+              {categories.slice(0, 8).map((category) => (
+                <Link key={category.id} className="sourcing-link" to={`/categories/${category.id}`}>
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          </article>
+          <div className="sourcing-actions">
+            {sourcingActions.map((item) => (
+              <Link key={item.title} className="sourcing-card" to={item.link}>
+                <strong>{item.title}</strong>
+                <p>{item.body}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-block">
         <div className="container promo-ribbon">
           {offerTabs.slice(0, 4).map((tab) => (
             <Link key={tab} className="promo-chip" to="/offers">
@@ -100,6 +129,24 @@ function HomePage({ favorites, toggleFavorite, addToCart }) {
                 onFavorite={() => toggleFavorite(product)}
                 onAddToCart={() => addToCart(product, 1)}
               />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-block">
+        <div className="container">
+          <SectionHeading eyebrow="Buy Again" title="Return to products customers revisit often" link="/favorites" />
+          <div className="scroll-row">
+            {buyAgainProducts.map((product) => (
+              <div className="scroll-card" key={`buy-again-${product.id}`}>
+                <ProductCard
+                  product={product}
+                  favoriteIds={favoriteIds}
+                  onFavorite={() => toggleFavorite(product)}
+                  onAddToCart={() => addToCart(product, 1)}
+                />
+              </div>
             ))}
           </div>
         </div>

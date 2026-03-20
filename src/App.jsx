@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, Outlet, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   accountActions,
@@ -42,8 +42,18 @@ const editorialCards = [
 ];
 
 function App() {
-  const [favorites, setFavorites] = useState(favoriteSeed);
-  const [cart, setCart] = useState(cartSeed);
+  const [favorites, setFavorites] = useState(() =>
+    loadStoredValue("optizenqor_favorites", favoriteSeed),
+  );
+  const [cart, setCart] = useState(() => loadStoredValue("optizenqor_cart", cartSeed));
+
+  useEffect(() => {
+    window.localStorage.setItem("optizenqor_favorites", JSON.stringify(favorites));
+  }, [favorites]);
+
+  useEffect(() => {
+    window.localStorage.setItem("optizenqor_cart", JSON.stringify(cart));
+  }, [cart]);
 
   function toggleFavorite(product) {
     setFavorites((current) =>
@@ -68,6 +78,27 @@ function App() {
     });
   }
 
+  function updateCartQuantity(productId, nextQuantity) {
+    if (nextQuantity < 1) {
+      removeFromCart(productId);
+      return;
+    }
+
+    setCart((current) =>
+      current.map((item) =>
+        item.product.id === productId ? { ...item, quantity: nextQuantity } : item,
+      ),
+    );
+  }
+
+  function removeFromCart(productId) {
+    setCart((current) => current.filter((item) => item.product.id !== productId));
+  }
+
+  function clearCart() {
+    setCart([]);
+  }
+
   return (
     <Routes>
       <Route path="/" element={<WebsiteLayout favorites={favorites} cart={cart} />}>
@@ -76,7 +107,6 @@ function App() {
           element={
             <HomePage
               favorites={favorites}
-              cart={cart}
               toggleFavorite={toggleFavorite}
               addToCart={addToCart}
             />
@@ -117,8 +147,17 @@ function App() {
           path="favorites"
           element={<FavoritesPage favorites={favorites} toggleFavorite={toggleFavorite} />}
         />
-        <Route path="cart" element={<CartPage cart={cart} />} />
-        <Route path="checkout" element={<CheckoutPage cart={cart} />} />
+        <Route
+          path="cart"
+          element={
+            <CartPage
+              cart={cart}
+              updateCartQuantity={updateCartQuantity}
+              removeFromCart={removeFromCart}
+            />
+          }
+        />
+        <Route path="checkout" element={<CheckoutPage cart={cart} clearCart={clearCart} />} />
         <Route path="account" element={<AccountPage />} />
       </Route>
       <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
@@ -154,6 +193,7 @@ function TopStrip() {
 function SiteHeader({ favorites, cart }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   function submitSearch(event) {
     event.preventDefault();
@@ -191,7 +231,7 @@ function SiteHeader({ favorites, cart }) {
             </Link>
             <Link className="header-stat" to="/cart">
               Cart
-              <strong>{cart.length}</strong>
+              <strong>{cartItemCount}</strong>
             </Link>
             <Link className="button ghost small" to="/sign-in">
               Sign In
@@ -349,6 +389,10 @@ function ShopPage({ favorites, toggleFavorite, addToCart }) {
   const [minRating, setMinRating] = useState(0);
   const favoriteIds = favorites.map((item) => item.id);
 
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
   const filteredProducts = useMemo(() => {
     let next = products.filter((product) =>
       `${product.name} ${product.categoryName}`.toLowerCase().includes(query.toLowerCase()),
@@ -411,15 +455,19 @@ function ShopPage({ favorites, toggleFavorite, addToCart }) {
             <span>Clean catalogue browsing with persistent filters.</span>
           </div>
           <div className="product-grid">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                favoriteIds={favoriteIds}
-                onFavorite={() => toggleFavorite(product)}
-                onAddToCart={() => addToCart(product, 1)}
-              />
-            ))}
+            {filteredProducts.length === 0 ? (
+              <div className="empty-state">No products matched your search or filter.</div>
+            ) : (
+              filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  favoriteIds={favoriteIds}
+                  onFavorite={() => toggleFavorite(product)}
+                  onAddToCart={() => addToCart(product, 1)}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -460,15 +508,19 @@ function CategoryDetailsPage({ favorites, toggleFavorite, addToCart }) {
       subtitle="Products presented as a full collection page."
     >
       <div className="product-grid">
-        {items.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            favoriteIds={favoriteIds}
-            onFavorite={() => toggleFavorite(product)}
-            onAddToCart={() => addToCart(product, 1)}
-          />
-        ))}
+        {items.length === 0 ? (
+          <div className="empty-state">No products found in this category yet.</div>
+        ) : (
+          items.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              favoriteIds={favoriteIds}
+              onFavorite={() => toggleFavorite(product)}
+              onAddToCart={() => addToCart(product, 1)}
+            />
+          ))
+        )}
       </div>
     </PageSection>
   );
@@ -504,7 +556,11 @@ function ProductPage({ favorites, toggleFavorite, addToCart }) {
             <p>Trusted by returning customers across categories</p>
           </div>
           <div className="quantity-picker">
-            <button className="icon-button" type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))}>
+            <button
+              className="icon-button"
+              type="button"
+              onClick={() => setQuantity((value) => Math.max(1, value - 1))}
+            >
               -
             </button>
             <strong>{quantity}</strong>
@@ -532,9 +588,16 @@ function ProductPage({ favorites, toggleFavorite, addToCart }) {
               <span>Estimated total</span>
               <strong>${(product.price * quantity).toFixed(2)}</strong>
             </div>
-            <Link className="button ghost full-width" to="/checkout">
+            <button
+              className="button ghost full-width"
+              type="button"
+              onClick={() => {
+                addToCart(product, quantity);
+                navigate("/checkout");
+              }}
+            >
               Buy Now
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -572,7 +635,7 @@ function FavoritesPage({ favorites, toggleFavorite }) {
   );
 }
 
-function CartPage({ cart }) {
+function CartPage({ cart, updateCartQuantity, removeFromCart }) {
   const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   return (
@@ -583,17 +646,44 @@ function CartPage({ cart }) {
     >
       <div className="cart-layout">
         <div className="list-stack">
-          {cart.map((item) => (
-            <article className="list-card" key={item.product.id}>
-              <img src={item.product.imageUrl} alt={item.product.name} />
-              <div className="list-copy">
-                <Link to={`/product/${item.product.id}`}>{item.product.name}</Link>
-                <p>{item.product.categoryName}</p>
-                <small>Qty: {item.quantity}</small>
-              </div>
-              <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
-            </article>
-          ))}
+          {cart.length === 0 ? (
+            <div className="empty-state">Your cart is empty. Add products from the shop to continue.</div>
+          ) : (
+            cart.map((item) => (
+              <article className="list-card" key={item.product.id}>
+                <img src={item.product.imageUrl} alt={item.product.name} />
+                <div className="list-copy">
+                  <Link to={`/product/${item.product.id}`}>{item.product.name}</Link>
+                  <p>{item.product.categoryName}</p>
+                  <div className="inline-controls">
+                    <button
+                      className="icon-button"
+                      type="button"
+                      onClick={() => updateCartQuantity(item.product.id, item.quantity - 1)}
+                    >
+                      -
+                    </button>
+                    <small>Qty: {item.quantity}</small>
+                    <button
+                      className="icon-button"
+                      type="button"
+                      onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                    <button
+                      className="button ghost small"
+                      type="button"
+                      onClick={() => removeFromCart(item.product.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
+              </article>
+            ))
+          )}
         </div>
         <aside className="summary-box">
           <h3>Order Summary</h3>
@@ -607,7 +697,7 @@ function CartPage({ cart }) {
           </div>
           <div className="price-row total-row">
             <span>Total</span>
-            <strong>${(total + 4.99).toFixed(2)}</strong>
+            <strong>${(total + (cart.length ? 4.99 : 0)).toFixed(2)}</strong>
           </div>
           <Link className="button primary full-width" to="/checkout">
             Proceed To Checkout
@@ -618,9 +708,11 @@ function CartPage({ cart }) {
   );
 }
 
-function CheckoutPage({ cart }) {
+function CheckoutPage({ cart, clearCart }) {
+  const navigate = useNavigate();
+  const [placed, setPlaced] = useState(false);
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const delivery = 4.99;
+  const delivery = cart.length ? 4.99 : 0;
   const total = subtotal + delivery;
 
   return (
@@ -629,6 +721,11 @@ function CheckoutPage({ cart }) {
       title="Secure checkout"
       subtitle="Shipping, order recap, and payment summary in a website-style two-column layout."
     >
+      {placed ? (
+        <div className="success-banner">
+          Order placed successfully. Your cart has been cleared and you are being sent back to the homepage.
+        </div>
+      ) : null}
       <div className="checkout-grid">
         <section className="summary-box">
           <h3>Shipping Address</h3>
@@ -639,14 +736,18 @@ function CheckoutPage({ cart }) {
         <section className="summary-box">
           <h3>Order Items</h3>
           <div className="list-stack compact">
-            {cart.map((item) => (
-              <div className="price-row" key={item.product.id}>
-                <span>
-                  {item.product.name} x{item.quantity}
-                </span>
-                <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
-              </div>
-            ))}
+            {cart.length === 0 ? (
+              <div className="empty-state">Your cart is empty. Add items before checkout.</div>
+            ) : (
+              cart.map((item) => (
+                <div className="price-row" key={item.product.id}>
+                  <span>
+                    {item.product.name} x{item.quantity}
+                  </span>
+                  <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
+                </div>
+              ))
+            )}
           </div>
         </section>
         <section className="summary-box">
@@ -663,7 +764,17 @@ function CheckoutPage({ cart }) {
             <span>Total</span>
             <strong>${total.toFixed(2)}</strong>
           </div>
-          <button className="button primary full-width" type="button">
+          <button
+            className="button primary full-width"
+            type="button"
+            disabled={cart.length === 0}
+            onClick={() => {
+              setPlaced(true);
+              clearCart();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.setTimeout(() => navigate("/"), 1200);
+            }}
+          >
             Place Order
           </button>
         </section>
@@ -673,6 +784,8 @@ function CheckoutPage({ cart }) {
 }
 
 function AccountPage() {
+  const [activeAction, setActiveAction] = useState(accountActions[0]?.title ?? "");
+
   return (
     <PageSection
       eyebrow="Account"
@@ -688,12 +801,24 @@ function AccountPage() {
       </section>
       <div className="account-grid">
         {accountActions.map((action) => (
-          <article className="account-card" key={action.title}>
+          <button
+            key={action.title}
+            className={`account-card account-button${activeAction === action.title ? " active" : ""}`}
+            type="button"
+            onClick={() => setActiveAction(action.title)}
+          >
             <h3>{action.title}</h3>
             <p>{action.subtitle}</p>
-            <span>Open section</span>
-          </article>
+            <span>{activeAction === action.title ? "Opened below" : "Open section"}</span>
+          </button>
         ))}
+      </div>
+      <div className="summary-box account-detail-box">
+        <h3>{activeAction}</h3>
+        <p>
+          This section is now interactive. You can switch between account panels and see the
+          selected section details here instead of tapping static cards.
+        </p>
       </div>
     </PageSection>
   );
@@ -768,9 +893,11 @@ function PageSection({ eyebrow, title, subtitle, children }) {
     <section className="page-section">
       <div className="container">
         <header className="section-header">
-          <p className="eyebrow">{eyebrow}</p>
-          <h1>{title}</h1>
-          <p className="section-subtitle">{subtitle}</p>
+          <div>
+            <p className="eyebrow">{eyebrow}</p>
+            <h1>{title}</h1>
+            <p className="section-subtitle">{subtitle}</p>
+          </div>
         </header>
         {children}
       </div>
@@ -848,6 +975,15 @@ function Footer() {
       </div>
     </footer>
   );
+}
+
+function loadStoredValue(key, fallback) {
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export default App;

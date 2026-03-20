@@ -568,6 +568,13 @@ p {
   gap: 6px;
 }
 
+.inline-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .cart-layout {
   grid-template-columns: 1.3fr 0.7fr;
   align-items: start;
@@ -626,6 +633,20 @@ p {
   gap: 14px;
 }
 
+.account-detail-box {
+  margin-top: 22px;
+}
+
+.success-banner {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: rgba(29, 127, 116, 0.1);
+  border: 1px solid rgba(29, 127, 116, 0.24);
+  color: var(--brand-deep);
+  font-weight: 700;
+}
+
 .checkout-grid {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
@@ -650,6 +671,17 @@ p {
 .account-card span {
   color: var(--brand);
   font-weight: 700;
+}
+
+.account-button {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-button.active {
+  border-color: var(--brand);
+  box-shadow: 0 18px 42px rgba(17, 79, 73, 0.12);
 }
 
 .auth-page {
@@ -718,6 +750,11 @@ p {
   justify-content: center;
   font-weight: 800;
   transition: 180ms ease;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .button.primary {
@@ -808,8 +845,10 @@ p {
 
   .card-actions,
   .hero-cta,
-  .product-actions {
+  .product-actions,
+  .inline-controls {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .button,

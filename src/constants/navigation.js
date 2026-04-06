@@ -1,47 +1,40 @@
-export const headerLinks = [
+export const primaryHeaderLinks = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
+  { to: "/offers", label: "Offer" },
+  { to: "/support", label: "Support" },
+];
+
+export const utilityHeaderLinks = [
   { to: "/categories", label: "Categories" },
-  { to: "/offers", label: "Offers" },
-  { to: "/favorites", label: "Favorites" },
+  { to: "/favorites", label: "Wishlist" },
   { to: "/cart", label: "Cart" },
   { to: "/account", label: "Account" },
 ];
 
 export const trustPoints = [
-  "Free delivery above $50",
-  "Seven-day easy returns",
-  "Curated bestselling essentials",
-  "Secure checkout and order tracking",
+  "Free delivery above $120",
+  "30-day returns on eligible orders",
+  "Verified sellers and secure payments",
+  "Live chat and order tracking",
 ];
 
 export const editorialCards = [
-  {
-    title: "Workday Setup",
-    body: "Desk-ready tech, accessories, and calm essentials to build a sharper routine.",
-    link: "/shop?q=laptop",
-  },
-  {
-    title: "Beauty & Wellness",
-    body: "Daily self-care products selected to feel premium without losing practicality.",
-    link: "/categories/beauty_personal_care",
-  },
+  { title: "Desk setup essentials", body: "Premium technology and warm home-office accessories for focused work.", link: "/categories/electronics_gadget" },
+  { title: "Beauty reset", body: "Trending skincare and wellness picks chosen for clean routines and quick restock.", link: "/categories/beauty_personal_care" },
+  { title: "Elevated gifting", body: "Bundles and accessories that feel polished enough to send without second guessing.", link: "/offers" },
 ];
 
-export const sourcingActions = [
-  {
-    title: "Request for Quotation",
-    body: "Post a product need and compare multiple matching offers fast.",
-    link: "/offers",
-  },
-  {
-    title: "Order Protection",
-    body: "Clear delivery, payment, and support trust signals across the storefront.",
-    link: "/account",
-  },
-  {
-    title: "Top Ranking",
-    body: "Browse bestselling picks and fast-moving collections by interest.",
-    link: "/shop",
-  },
+export const orderStatuses = [
+  "To Pay",
+  "To Ship",
+  "To Receive",
+  "To Review",
+  "To Return",
+  "Cancellation",
+  "Processing",
+  "Delivered",
+  "Cancelled",
 ];
+
+export const checkoutSteps = ["Address", "Shipping", "Payment", "Review"];

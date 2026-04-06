@@ -1,62 +1,71 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import ErrorState from "../../../components/feedback/ErrorState";
+import PageSection from "../../../components/common/PageSection";
+import ProductCard from "../../../components/common/ProductCard";
 import LoadingState from "../../../components/feedback/LoadingState";
 import NotFoundState from "../../../components/feedback/NotFoundState";
-import ProductCard from "../../../components/common/ProductCard";
-import PageSection from "../../../components/common/PageSection";
 import useAsyncData from "../../../hooks/useAsyncData";
 import { getCategoryDetails } from "../services/categoryService";
 
 function CategoryDetailsPage() {
   const { categoryId } = useParams();
-  const { data, loading, error, reload } = useAsyncData(
-    () => getCategoryDetails(categoryId),
-    [categoryId],
-  );
+  const [activeSubcategory, setActiveSubcategory] = useState("All");
+  const { data, loading } = useAsyncData(() => getCategoryDetails(categoryId), [categoryId]);
 
-  if (loading) {
-    return <LoadingState label="Loading collection..." />;
-  }
-
-  if (error) {
-    return (
-      <PageSection eyebrow="Category" title="Collection unavailable" subtitle="Please try reloading this category.">
-        <ErrorState
-          title="This category could not be loaded"
-          description="The collection request failed before products were returned."
-          onRetry={reload}
-        />
-      </PageSection>
-    );
-  }
-
+  if (loading) return <LoadingState label="Loading collection..." />;
   if (!data) {
     return (
-      <PageSection eyebrow="Category" title="Collection not found" subtitle="The requested category does not exist.">
-        <NotFoundState
-          title="Category not found"
-          description="That collection link does not match any category in the storefront."
-          primaryAction={{ label: "Browse categories", to: "/categories" }}
-          secondaryAction={{ label: "Go to shop", to: "/shop" }}
-        />
+      <PageSection eyebrow="Category" title="Category not found" subtitle="This collection does not exist in the current storefront.">
+        <NotFoundState title="Category not found" description="Try another collection or return to the full category directory." primaryAction={{ label: "Open categories", to: "/categories" }} secondaryAction={{ label: "Browse shop", to: "/shop" }} />
       </PageSection>
     );
   }
 
-  const { category, items } = data;
+  const { category, items, promotedProducts } = data;
 
   return (
-    <PageSection
-      eyebrow="Category"
-      title={category?.bannerTitle ?? "Collection"}
-      subtitle="Products presented as a full collection page."
-    >
-      <div className="product-grid">
-        {items.length === 0 ? (
-          <div className="empty-state">No products found in this category yet.</div>
-        ) : (
-          items.map((product) => <ProductCard key={product.id} product={product} />)
-        )}
+    <PageSection eyebrow="Category" title={category.heroTitle} subtitle={category.description}>
+      <div className="category-hero">
+        <img src={category.heroImage} alt={category.name} />
+        <div className="category-hero-copy">
+          <span className="badge">{category.name}</span>
+          <h2>{category.description}</h2>
+          <div className="chip-row">
+            <button className={`chip${activeSubcategory === "All" ? " active" : ""}`} type="button" onClick={() => setActiveSubcategory("All")}>All</button>
+            {category.subcategories.map((subCategory) => (
+              <button key={subCategory} className={`chip${activeSubcategory === subCategory ? " active" : ""}`} type="button" onClick={() => setActiveSubcategory(subCategory)}>
+                {subCategory}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="category-layout">
+        <aside className="summary-box">
+          <h3>Category filters</h3>
+          <div className="list-stack compact">
+            <div className="list-card compact-row"><span>Best rated</span></div>
+            <div className="list-card compact-row"><span>In stock only</span></div>
+            <div className="list-card compact-row"><span>Fast shipping</span></div>
+            <div className="list-card compact-row"><span>Newest products</span></div>
+          </div>
+        </aside>
+        <div className="product-grid">
+          {items.map((product) => <ProductCard key={product.id} product={product} />)}
+        </div>
+      </div>
+
+      <div className="section-block">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Promoted</p>
+            <h2>Cross-category picks worth surfacing here</h2>
+          </div>
+        </div>
+        <div className="product-grid">
+          {promotedProducts.map((product) => <ProductCard key={product.id} product={product} compact />)}
+        </div>
       </div>
     </PageSection>
   );

@@ -2,8 +2,8 @@ function TopStrip() {
   return (
     <div className="top-strip">
       <div className="container top-strip-inner">
-        <span>Seasonal ecommerce storefront redesign for OptiZenqor</span>
-        <span>Support: support@yourapp.com</span>
+        <span>Global shipping, secure checkout, and member-only offers for Optizenqor Store.</span>
+        <span>Support: support@optizenqor.com</span>
       </div>
     </div>
   );

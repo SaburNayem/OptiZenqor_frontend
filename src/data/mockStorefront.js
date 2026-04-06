@@ -1,215 +1,127 @@
 export const categories = [
-  { id: "beauty_personal_care", name: "Beauty & Personal Care", icon: "Spa", bannerTitle: "Beauty & Personal Care" },
-  { id: "books_stationary", name: "Books & Stationary", icon: "MenuBook", bannerTitle: "Books & Stationary" },
-  { id: "electronics_gadget", name: "Electronics & Gadget", icon: "Devices", bannerTitle: "Electronics & Gadget" },
-  { id: "fashion_clothing", name: "Fashion & Clothing", icon: "Checkroom", bannerTitle: "Fashion & Clothing" },
-  { id: "groceries_food", name: "Groceries & Food", icon: "Fastfood", bannerTitle: "Groceries & Food" },
-  { id: "health_wellness", name: "Health & Wellness", icon: "HealthAndSafety", bannerTitle: "Health & Wellness" },
-  { id: "home_living", name: "Home & Living", icon: "Chair", bannerTitle: "Home & Living" },
-  { id: "sports_outdoor", name: "Sports & Outdoor", icon: "SportsBasketball", bannerTitle: "Sports & Outdoor" },
-  { id: "toy_babies_product", name: "Toy & Babies", icon: "Toys", bannerTitle: "Toy & Babies Product" },
+  { id: "beauty_personal_care", name: "Beauty & Personal Care", description: "Clinical skincare and elevated daily rituals.", heroTitle: "High-performance beauty for everyday confidence", heroImage: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80", subcategories: ["Skincare", "Haircare", "Makeup", "Fragrance"], accent: "#d97757" },
+  { id: "books_stationary", name: "Books & Stationary", description: "Thoughtful tools for study and creative work.", heroTitle: "Purposeful pages, planners, and reading essentials", heroImage: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80", subcategories: ["Planners", "Journals", "Pens", "Reading"], accent: "#8f6d4f" },
+  { id: "electronics_gadget", name: "Electronics & Gadget", description: "Performance tech and workspace upgrades.", heroTitle: "Sharper performance for work, travel, and entertainment", heroImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80", subcategories: ["Audio", "Computing", "Wearables", "Accessories"], accent: "#4f7cff" },
+  { id: "fashion_clothing", name: "Fashion & Clothing", description: "Modern wardrobe staples with premium fabric.", heroTitle: "Refined essentials built for repeat wear", heroImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80", subcategories: ["Outerwear", "Sneakers", "Bags", "Daily Wear"], accent: "#171719" },
+  { id: "groceries_food", name: "Groceries & Food", description: "Better pantry picks and specialty snacks.", heroTitle: "Pantry staples and premium snacks, delivered fresh", heroImage: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80", subcategories: ["Snacks", "Organic", "Coffee", "Essentials"], accent: "#4f9f64" },
+  { id: "health_wellness", name: "Health & Wellness", description: "Recovery, supplements, and calming support.", heroTitle: "Daily wellness products that fit real routines", heroImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80", subcategories: ["Supplements", "Recovery", "Sleep", "Fitness Care"], accent: "#4a9d94" },
+  { id: "home_living", name: "Home & Living", description: "Beautiful, functional pieces for calmer spaces.", heroTitle: "Warm spaces, better storage, and design-led living", heroImage: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80", subcategories: ["Lighting", "Decor", "Kitchen", "Organization"], accent: "#a27144" },
+  { id: "sports_outdoor", name: "Sports & Outdoor", description: "Gear for movement, travel, and outdoor plans.", heroTitle: "Performance gear for active days and outdoor plans", heroImage: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80", subcategories: ["Hydration", "Training", "Travel", "Outdoor"], accent: "#1d7f74" },
+  { id: "toy_babies_product", name: "Toy & Babies Product", description: "Safer, softer, joy-filled picks for families.", heroTitle: "Playful essentials with comfort-first design", heroImage: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=1200&q=80", subcategories: ["Nursery", "Learning", "Soft Toys", "Care"], accent: "#f08aa2" },
 ];
+
+const categoryName = (categoryId) => categories.find((category) => category.id === categoryId)?.name ?? "Store";
 
 export const products = [
-  {
-    id: "p1",
-    name: "Urban Laptop",
-    categoryId: "electronics_gadget",
-    categoryName: "Electronics & Gadget",
-    price: 20,
-    rating: 4.5,
-    imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80",
-    description: "A lightweight productivity laptop inspired by the original shop app's featured products.",
-  },
-  {
-    id: "p2",
-    name: "Studio Headphones",
-    categoryId: "electronics_gadget",
-    categoryName: "Electronics & Gadget",
-    price: 25,
-    rating: 4.6,
-    imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80",
-    description: "Comfortable over-ear headphones for work sessions, media, and focused listening.",
-  },
-  {
-    id: "p3",
-    name: "Classic Jacket",
-    categoryId: "fashion_clothing",
-    categoryName: "Fashion & Clothing",
-    price: 30,
-    rating: 4.4,
-    imageUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80",
-    description: "A premium layer with a sharp silhouette and all-day comfort.",
-  },
-  {
-    id: "p4",
-    name: "Face Cleanser",
-    categoryId: "beauty_personal_care",
-    categoryName: "Beauty & Personal Care",
-    price: 15,
-    rating: 4.5,
-    imageUrl: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80",
-    description: "A gentle cleanser designed for everyday use and a fresh morning routine.",
-  },
-  {
-    id: "p5",
-    name: "Shampoo",
-    categoryId: "beauty_personal_care",
-    categoryName: "Beauty & Personal Care",
-    price: 20,
-    rating: 4.5,
-    imageUrl: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=900&q=80",
-    description: "A salon-style wash that leaves hair smooth and refreshed.",
-  },
-  {
-    id: "p6",
-    name: "Lipstick",
-    categoryId: "beauty_personal_care",
-    categoryName: "Beauty & Personal Care",
-    price: 10,
-    rating: 4.4,
-    imageUrl: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=900&q=80",
-    description: "A bold daily-wear color with a soft matte finish.",
-  },
-  {
-    id: "p7",
-    name: "Perfume",
-    categoryId: "beauty_personal_care",
-    categoryName: "Beauty & Personal Care",
-    price: 35,
-    rating: 4.7,
-    imageUrl: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
-    description: "A clean floral scent that feels polished without being overpowering.",
-  },
-  {
-    id: "p8",
-    name: "Desk Lamp",
-    categoryId: "home_living",
-    categoryName: "Home & Living",
-    price: 18,
-    rating: 4.3,
-    imageUrl: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
-    description: "Warm ambient lighting for study corners, desks, and bedside setups.",
-  },
-  {
-    id: "p9",
-    name: "Fitness Bottle",
-    categoryId: "sports_outdoor",
-    categoryName: "Sports & Outdoor",
-    price: 12,
-    rating: 4.2,
-    imageUrl: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80",
-    description: "A durable companion for workouts, walking, and everyday hydration.",
-  },
-  {
-    id: "p10",
-    name: "Notebook Set",
-    categoryId: "books_stationary",
-    categoryName: "Books & Stationary",
-    price: 14,
-    rating: 4.5,
-    imageUrl: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=80",
-    description: "Minimal notebooks made for planning, journaling, and neat daily lists.",
-  },
-  {
-    id: "p11",
-    name: "Organic Snacks",
-    categoryId: "groceries_food",
-    categoryName: "Groceries & Food",
-    price: 9,
-    rating: 4.1,
-    imageUrl: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80",
-    description: "Healthy snack packs for quick breaks between work and study.",
-  },
-  {
-    id: "p12",
-    name: "Wellness Kit",
-    categoryId: "health_wellness",
-    categoryName: "Health & Wellness",
-    price: 28,
-    rating: 4.8,
-    imageUrl: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80",
-    description: "A compact self-care bundle with practical daily essentials.",
-  },
+  { id: "p1", slug: "aeroflex-pro-laptop", name: "Aeroflex Pro Laptop", categoryId: "electronics_gadget", categoryName: categoryName("electronics_gadget"), price: 1299, compareAtPrice: 1499, rating: 4.9, reviewCount: 312, imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80"], shortDescription: "Ultra-light performance laptop for focused work and travel.", description: "Built for founders, designers, and power shoppers, the Aeroflex Pro pairs a bright display with all-day battery and a whisper-quiet aluminum body.", highlights: ["14.2 inch Retina display", "18-hour battery", "Fast-charge USB-C", "Studio-grade microphone array"], specifications: { Processor: "M4-class performance chip", Memory: "16 GB", Storage: "1 TB SSD", Weight: "1.28 kg" }, variants: ["Silver", "Midnight", "Sand"], tags: ["featured", "premium", "work"], featured: true, trending: true, isNew: true, stockState: "in-stock", stockLeft: 18, seller: "Optizenqor Tech", shipping: "Free express shipping in 2-4 days", returns: "30-day easy returns", badge: "Best Seller" },
+  { id: "p2", slug: "soniq-studio-headphones", name: "Soniq Studio Headphones", categoryId: "electronics_gadget", categoryName: categoryName("electronics_gadget"), price: 249, compareAtPrice: 319, rating: 4.8, reviewCount: 184, imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=900&q=80"], shortDescription: "Noise-cancelling headphones tuned for long listening sessions.", description: "A refined over-ear fit, balanced sound, and plush cushioning make this an easy daily carry for deep work or travel.", highlights: ["40-hour battery", "Adaptive ANC", "Low-latency mode", "Dual device pairing"], specifications: { Connectivity: "Bluetooth 5.3", Battery: "40 hours", Weight: "245 g", Charging: "USB-C" }, variants: ["Onyx", "Cloud", "Forest"], tags: ["audio", "travel", "trending"], featured: true, trending: true, isNew: false, stockState: "in-stock", stockLeft: 42, seller: "Optizenqor Audio", shipping: "Free delivery above $80", returns: "15-day replacement guarantee", badge: "Top Rated" },
+  { id: "p3", slug: "atelier-cloud-jacket", name: "Atelier Cloud Jacket", categoryId: "fashion_clothing", categoryName: categoryName("fashion_clothing"), price: 168, compareAtPrice: 210, rating: 4.7, reviewCount: 98, imageUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=80"], shortDescription: "Structured outerwear with a soft brushed lining.", description: "Minimalist tailoring meets practical weather-ready comfort in a lightweight jacket that dresses up casual looks.", highlights: ["Wind resistant", "Interior media pocket", "Relaxed fit", "Premium brushed lining"], specifications: { Material: "Cotton blend", Fit: "Relaxed", Care: "Machine wash cold", Origin: "Designed in-house" }, variants: ["Stone", "Black", "Olive"], tags: ["new", "fashion"], featured: true, trending: false, isNew: true, stockState: "low-stock", stockLeft: 6, seller: "Optizenqor Apparel", shipping: "Delivery in 3-5 days", returns: "Free size exchange", badge: "New" },
+  { id: "p4", slug: "lumena-balance-cleanser", name: "Lumena Balance Cleanser", categoryId: "beauty_personal_care", categoryName: categoryName("beauty_personal_care"), price: 22, compareAtPrice: 28, rating: 4.6, reviewCount: 264, imageUrl: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=900&q=80"], shortDescription: "Gentle daily cleanser with a fresh, balanced finish.", description: "Formulated for everyday use, this low-foam cleanser leaves skin clean, calm, and ready for the rest of your routine.", highlights: ["pH-balanced formula", "No sulfates", "Dermatologist tested", "For all skin types"], specifications: { Size: "150 ml", Texture: "Cream gel", Use: "Morning and night", Fragrance: "Low fragrance" }, variants: ["Single", "Duo Pack"], tags: ["beauty", "best-seller"], featured: false, trending: true, isNew: false, stockState: "in-stock", stockLeft: 67, seller: "Optizenqor Beauty", shipping: "Ships today if ordered by 4 PM", returns: "Return unopened within 14 days", badge: "Skin Favorite" },
+  { id: "p5", slug: "vellum-planner-set", name: "Vellum Planner Set", categoryId: "books_stationary", categoryName: categoryName("books_stationary"), price: 38, compareAtPrice: 45, rating: 4.8, reviewCount: 77, imageUrl: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80"], shortDescription: "A premium planning kit for work, study, and weekly clarity.", description: "A clean weekly planner, matching pen set, and tab system designed for people who prefer beautiful organization.", highlights: ["Undated layout", "Premium paper", "Tabbed sections", "Matching pen sleeve"], specifications: { Pages: "220", Size: "A5", Cover: "Textured hard cover", Extras: "3 metal pens" }, variants: ["Sand", "Ink", "Clay"], tags: ["desk", "gift"], featured: false, trending: false, isNew: true, stockState: "in-stock", stockLeft: 29, seller: "Optizenqor Paper Goods", shipping: "Standard delivery in 4 days", returns: "Gift-ready return support", badge: "Gift Pick" },
+  { id: "p6", slug: "arc-desk-lamp", name: "Arc Desk Lamp", categoryId: "home_living", categoryName: categoryName("home_living"), price: 79, compareAtPrice: 99, rating: 4.5, reviewCount: 143, imageUrl: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80"], shortDescription: "Warm ambient light for desks, side tables, and quiet corners.", description: "A slim matte metal frame and soft warm bulb create a designer lighting accent without visual clutter.", highlights: ["Touch dimmer", "Warm LED included", "Matte finish", "Low-profile base"], specifications: { Height: "42 cm", Material: "Powder-coated metal", Power: "USB-C", Light: "3000K warm white" }, variants: ["Graphite", "Ivory"], tags: ["home", "workspace"], featured: false, trending: true, isNew: false, stockState: "in-stock", stockLeft: 21, seller: "Optizenqor Living", shipping: "Free home delivery", returns: "30-day returns", badge: "Home Edit" },
+  { id: "p7", slug: "summit-hydration-bottle", name: "Summit Hydration Bottle", categoryId: "sports_outdoor", categoryName: categoryName("sports_outdoor"), price: 32, compareAtPrice: 40, rating: 4.7, reviewCount: 205, imageUrl: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80"], shortDescription: "Insulated, durable, and easy to carry through long days.", description: "Double-wall insulation keeps drinks cold while a powder-coated finish improves grip during commutes and workouts.", highlights: ["Keeps cold for 18 hours", "Leak-proof cap", "Fits cup holders", "Dishwasher safe lid"], specifications: { Capacity: "750 ml", Material: "Stainless steel", Insulation: "Double wall", Weight: "320 g" }, variants: ["Sage", "Black", "Copper"], tags: ["fitness", "daily"], featured: false, trending: false, isNew: false, stockState: "in-stock", stockLeft: 53, seller: "Optizenqor Outdoor", shipping: "Next-day dispatch", returns: "14-day returns", badge: "Top Pick" },
+  { id: "p8", slug: "purepath-wellness-kit", name: "PurePath Wellness Kit", categoryId: "health_wellness", categoryName: categoryName("health_wellness"), price: 64, compareAtPrice: 88, rating: 4.8, reviewCount: 119, imageUrl: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"], shortDescription: "A calm-start kit with essentials for sleep, hydration, and recovery.", description: "Curated for sustainable routines, this kit supports better evenings, more recovery, and a cleaner wellness setup.", highlights: ["Sleep support tea", "Recovery balm", "Hydration tablets", "Travel pouch included"], specifications: { Bundle: "4 items", Use: "Daily recovery", Packaging: "Reusable pouch", Weight: "0.65 kg" }, variants: ["Core Kit", "Gift Set"], tags: ["wellness", "gift"], featured: true, trending: true, isNew: false, stockState: "low-stock", stockLeft: 8, seller: "Optizenqor Wellness", shipping: "Free shipping over $50", returns: "7-day support guarantee", badge: "Limited" },
+  { id: "p9", slug: "harvest-organic-snack-box", name: "Harvest Organic Snack Box", categoryId: "groceries_food", categoryName: categoryName("groceries_food"), price: 24, compareAtPrice: 31, rating: 4.4, reviewCount: 88, imageUrl: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80"], shortDescription: "A better-for-you snack lineup for desks, travel, and gifting.", description: "A rotating box of premium snacks chosen for taste, clean ingredients, and practical on-the-go packaging.", highlights: ["8 premium snack packs", "Low sugar assortment", "Gift-friendly box", "Fresh monthly selection"], specifications: { Packs: "8", Style: "Mixed savory and sweet", ShelfLife: "60+ days", Origin: "Curated import mix" }, variants: ["Classic", "Protein Focus"], tags: ["snack", "deal"], featured: false, trending: false, isNew: true, stockState: "in-stock", stockLeft: 31, seller: "Optizenqor Pantry", shipping: "Same-day packing", returns: "Food item support only", badge: "Fresh Drop" },
+  { id: "p10", slug: "mini-explorer-learning-set", name: "Mini Explorer Learning Set", categoryId: "toy_babies_product", categoryName: categoryName("toy_babies_product"), price: 54, compareAtPrice: 69, rating: 4.9, reviewCount: 52, imageUrl: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?auto=format&fit=crop&w=900&q=80"], shortDescription: "Soft, safe, and sensory-rich play for early learning.", description: "A giftable toddler set with tactile pieces, stacking forms, and learning prompts designed for guided play.", highlights: ["Non-toxic materials", "Ages 18 months+", "Storage pouch", "Learning cards included"], specifications: { Material: "BPA-free silicone and cotton", Pieces: "16", Age: "18m+", Wash: "Spot clean" }, variants: ["Blush", "Stone"], tags: ["family", "gift"], featured: false, trending: true, isNew: false, stockState: "in-stock", stockLeft: 14, seller: "Optizenqor Family", shipping: "2-3 day shipping", returns: "30-day returns", badge: "Parent Favorite" },
+  { id: "p11", slug: "nova-smartwatch", name: "Nova Smartwatch", categoryId: "electronics_gadget", categoryName: categoryName("electronics_gadget"), price: 299, compareAtPrice: 359, rating: 4.6, reviewCount: 129, imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=900&q=80"], shortDescription: "Fitness tracking, message alerts, and premium everyday style.", description: "A rounded edge display and health-aware tracking turn this smartwatch into a sharp daily companion for work and workouts.", highlights: ["Heart rate tracking", "7-day battery", "Water resistant", "Fast pairing"], specifications: { Display: "AMOLED", Battery: "7 days", WaterResistance: "5 ATM", Band: "22 mm quick swap" }, variants: ["Black", "Silver", "Rose"], tags: ["wearables", "new"], featured: false, trending: true, isNew: true, stockState: "in-stock", stockLeft: 24, seller: "Optizenqor Wear", shipping: "Express shipping available", returns: "30-day returns", badge: "Trending" },
+  { id: "p12", slug: "linen-cloud-bedding-set", name: "Linen Cloud Bedding Set", categoryId: "home_living", categoryName: categoryName("home_living"), price: 119, compareAtPrice: 149, rating: 4.7, reviewCount: 68, imageUrl: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80", gallery: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80", "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80"], shortDescription: "Soft washed linen designed for cooler nights and calm bedrooms.", description: "A breathable bedding bundle with premium drape, relaxed texture, and all-season comfort.", highlights: ["Stone-washed linen", "Breathable weave", "Deep pocket fit", "Giftable storage bag"], specifications: { Material: "European flax linen", Sizes: "Queen / King", Pieces: "4", Care: "Machine wash" }, variants: ["Ivory", "Mist", "Taupe"], tags: ["home", "premium"], featured: true, trending: false, isNew: false, stockState: "in-stock", stockLeft: 11, seller: "Optizenqor Living", shipping: "Free premium shipping", returns: "30-day comfort guarantee", badge: "Luxury Pick" },
 ];
 
-export const featuredProducts = products.slice(0, 4);
-export const popularProducts = products.slice(4, 8);
-export const favoriteSeed = [products[1], products[3], products[6]];
-export const cartSeed = [
-  { product: products[0], quantity: 1 },
-  { product: products[6], quantity: 2 },
+export const reviews = [
+  { id: "r1", productId: "p1", author: "Mina Rahman", rating: 5, title: "Fast and premium", body: "Battery holds up through long client calls and travel days. The finish feels genuinely premium.", date: "April 2, 2026", verified: true, reply: "Thanks for highlighting the battery life. We designed this one for long work sessions." },
+  { id: "r2", productId: "p1", author: "Arif Hasan", rating: 4, title: "Excellent screen", body: "Crisp display and very light in the bag. I would love one more port, but overall it is excellent.", date: "March 21, 2026", verified: true },
+  { id: "r3", productId: "p2", author: "Sara Noor", rating: 5, title: "Great for travel", body: "The noise cancelling is strong without feeling heavy. Good call quality too.", date: "March 12, 2026", verified: true },
+  { id: "r4", productId: "p4", author: "Nabila Ahmed", rating: 4, title: "Gentle daily cleanser", body: "No irritation and it leaves my skin feeling clean instead of tight.", date: "February 28, 2026", verified: true },
+  { id: "r5", productId: "p8", author: "Shafin Ali", rating: 5, title: "Perfect gift box", body: "Bought it for my wife and ended up reordering for myself. The recovery balm is the standout.", date: "April 5, 2026", verified: true, reply: "That is wonderful to hear. We are glad the bundle worked so well as a gift." },
 ];
 
-export const accountProfile = {
-  name: "Shob Bazaar",
-  email: "support@yourapp.com",
-  avatarUrl: "https://i.pravatar.cc/160?img=12",
+export const testimonials = [
+  { id: "t1", name: "Lamia S.", role: "Returning customer", quote: "The checkout flow feels effortless and the product presentation builds trust before you even scroll far." },
+  { id: "t2", name: "Irfan M.", role: "Tech buyer", quote: "Optizenqor Store feels like a real global brand site, not a generic storefront. Search and recommendations are especially strong." },
+  { id: "t3", name: "Nusrat A.", role: "Lifestyle shopper", quote: "I can browse on mobile comfortably, save items fast, and still feel guided instead of overwhelmed." },
+];
+
+export const supportFaqs = [
+  { id: "faq1", question: "How quickly do orders ship?", answer: "Most in-stock orders leave our warehouse within 24 hours. Express items show a tighter delivery estimate on the product page." },
+  { id: "faq2", question: "Can I change an address after checkout?", answer: "Yes. You can update the shipping address from Support or Order Details before the order enters the shipping stage." },
+  { id: "faq3", question: "What payment methods are supported?", answer: "Cards, digital wallets, cash on delivery in eligible regions, and saved payment methods on your account." },
+  { id: "faq4", question: "How do returns work?", answer: "Eligible products can be returned from the Order Details page. Some care and grocery items follow category-specific policies." },
+];
+
+export const paymentMethods = [
+  { id: "pm1", brand: "Visa", label: "Visa ending 2048", expires: "08/28", primary: true },
+  { id: "pm2", brand: "Mastercard", label: "Mastercard ending 1187", expires: "03/29", primary: false },
+  { id: "pm3", brand: "Wallet", label: "Optizenqor Wallet", expires: "Balance $174.00", primary: false },
+];
+
+export const addresses = [
+  { id: "a1", label: "Home", name: "Ariana Chowdhury", phone: "+880 1710 000000", line1: "House 42, Road 11, Banani", city: "Dhaka", region: "Dhaka", country: "Bangladesh", postalCode: "1213", primary: true },
+  { id: "a2", label: "Office", name: "Ariana Chowdhury", phone: "+880 1710 000000", line1: "Level 8, Tech Park, Gulshan", city: "Dhaka", region: "Dhaka", country: "Bangladesh", postalCode: "1212", primary: false },
+];
+
+export const notifications = [
+  { id: "n1", title: "Your order OZS-10488 is now out for delivery", time: "20 mins ago", type: "order" },
+  { id: "n2", title: "Flash offer: 20% off selected audio", time: "2 hours ago", type: "offer" },
+  { id: "n3", title: "Wishlist drop: 1 item is back in stock", time: "Yesterday", type: "wishlist" },
+];
+
+export const supportTickets = [
+  { id: "st1", subject: "Update delivery window for OZS-10488", status: "Open", updatedAt: "10 mins ago" },
+  { id: "st2", subject: "Exchange request for Atelier Cloud Jacket", status: "Awaiting reply", updatedAt: "Yesterday" },
+  { id: "st3", subject: "Payment confirmation not received", status: "Resolved", updatedAt: "April 1, 2026" },
+];
+
+export const supportMessages = [
+  { id: "m1", sender: "support", body: "Hi Ariana, I can help with your delivery request today.", time: "10:24 AM" },
+  { id: "m2", sender: "user", body: "Thanks. I need the package delivered after 5 PM if possible.", time: "10:25 AM" },
+  { id: "m3", sender: "support", body: "I have added the note to your courier profile and order timeline.", time: "10:26 AM" },
+];
+
+export const settings = { pushNotifications: true, emailUpdates: true, smsAlerts: false, privateProfile: false, biometricLogin: true, savePaymentInformation: true, appLanguage: "English", productTranslation: "Auto", currency: "USD", deliveryPreference: "Leave at door", searchHistory: true };
+
+export const userProfile = { name: "Ariana Chowdhury", email: "ariana@optizenqor.com", phone: "+880 1710 000000", avatarUrl: "https://i.pravatar.cc/200?img=32", loyaltyTier: "Opti Black", memberSince: "2022" };
+
+export const favoriteSeed = [products[0], products[3], products[7], products[10]];
+export const cartSeed = [{ product: products[1], quantity: 1 }, { product: products[7], quantity: 1 }];
+
+export const orders = [
+  { id: "ord1", number: "OZS-10488", status: "Processing", placedAt: "April 4, 2026", estimatedDelivery: "April 8, 2026", items: [{ product: products[0], quantity: 1 }, { product: products[1], quantity: 1 }], shippingAddress: addresses[0], paymentMethod: paymentMethods[0].label, timeline: ["Order placed", "Payment confirmed", "Preparing shipment", "Courier assigned"], subtotal: 1548, shippingFee: 0, total: 1548 },
+  { id: "ord2", number: "OZS-10417", status: "Delivered", placedAt: "March 28, 2026", estimatedDelivery: "Delivered on April 1, 2026", items: [{ product: products[3], quantity: 2 }], shippingAddress: addresses[1], paymentMethod: paymentMethods[1].label, timeline: ["Order placed", "Packed", "Shipped", "Delivered"], subtotal: 44, shippingFee: 4, total: 48 },
+  { id: "ord3", number: "OZS-10352", status: "To Review", placedAt: "March 18, 2026", estimatedDelivery: "Delivered on March 22, 2026", items: [{ product: products[6], quantity: 1 }], shippingAddress: addresses[0], paymentMethod: paymentMethods[2].label, timeline: ["Order placed", "Shipped", "Delivered", "Review pending"], subtotal: 32, shippingFee: 4, total: 36 },
+];
+
+export const promotionalBanners = [
+  { id: "pb1", title: "Spring reset picks", body: "Up to 30% off beauty, wellness, and bedroom edits.", action: "Shop offers", link: "/offers" },
+  { id: "pb2", title: "Members get priority support", body: "Faster chat access, easier returns, and curated drops.", action: "View account", link: "/account" },
+  { id: "pb3", title: "Build your calm workspace", body: "Premium devices and desk accessories in one place.", action: "Explore electronics", link: "/categories/electronics_gadget" },
+];
+
+export const recentSearches = ["headphones", "skin cleanser", "desk lamp"];
+export const trendingSearches = ["gift sets", "smartwatch", "wireless audio", "planner"];
+
+export const homeCollections = {
+  featuredProducts: products.filter((product) => product.featured).slice(0, 4),
+  popularProducts: [...products].sort((left, right) => right.reviewCount - left.reviewCount).slice(0, 4),
+  newArrivals: products.filter((product) => product.isNew).slice(0, 4),
+  recommendedProducts: products.filter((product) => product.trending).slice(0, 4),
+  deals: [...products].sort((left, right) => (right.compareAtPrice - right.price) - (left.compareAtPrice - left.price)).slice(0, 4),
 };
 
+export const supportChannels = [
+  { id: "sc1", title: "Email support", body: "support@optizenqor.com", meta: "Replies in under 2 hours" },
+  { id: "sc2", title: "Call us", body: "+1 (800) 555-0199", meta: "24/7 global order assistance" },
+  { id: "sc3", title: "Live chat", body: "Agents online now", meta: "Average wait time: 2 minutes" },
+];
+
 export const accountActions = [
-  { title: "Personal Details", subtitle: "Update profile information and photo" },
-  { title: "My Order", subtitle: "Track current orders and expected delivery" },
-  { title: "Delivery Address", subtitle: "Manage saved shipping addresses" },
-  { title: "Order History", subtitle: "See your previous purchases" },
-  { title: "Payment Methods", subtitle: "Add cards and preferred payment options" },
-  { title: "Support", subtitle: "Get help with your account and checkout" },
+  { title: "Profile & security", subtitle: "Manage details, password, and trusted devices" },
+  { title: "Orders & tracking", subtitle: "Track live orders and revisit past purchases" },
+  { title: "Addresses", subtitle: "Add, edit, and prioritize delivery locations" },
+  { title: "Payments", subtitle: "Saved cards, wallet balance, and checkout preferences" },
+  { title: "Wishlist", subtitle: "Products you are saving for later" },
+  { title: "Support", subtitle: "Tickets, chat, FAQs, and delivery help" },
 ];
 
-export const drawerItems = [
-  { label: "Order History", slug: "order-history" },
-  { label: "Support", slug: "support" },
-  { label: "Review", slug: "review" },
-  { label: "Help", slug: "help" },
-  { label: "About Us", slug: "about-us" },
-  { label: "Logout", slug: "logout" },
-];
-
-export const offerTabs = [
-  "Free Delivery",
-  "Flash Sell",
-  "Buy Get",
-  "Must Buy",
-  "Best Price",
-  "Mega Discount",
-  "Free Gift",
-];
-
-export const homeHighlights = [
-  "Fast delivery across major cities",
-  "Original product-focused shopping flow from your existing app",
-  "Clean teal brand palette carried over into React",
-];
-
-export const drawerInfoPages = [
-  {
-    slug: "support",
-    title: "Support",
-    body: "Talk to our support team about orders, payment, delivery, or product issues. This restores the support destination from your drawer flow.",
-    type: "info",
-  },
-  {
-    slug: "review",
-    title: "Review",
-    body: "Share your experience with recent products and help improve the storefront. This page stands in for the review section from the app.",
-    type: "info",
-  },
-  {
-    slug: "help",
-    title: "Help",
-    body: "Browse quick answers about ordering, returns, payments, delivery windows, and account usage.",
-    type: "info",
-  },
-  {
-    slug: "about-us",
-    title: "About Us",
-    body: "Shob Bazaar is presented here as a polished ecommerce storefront that keeps the same app content while shifting it into a more modern web experience.",
-    type: "info",
-  },
-];
-
-export const sampleOrders = [
-  { id: "#123456", date: "March 8, 2025", status: "Delivered", amount: "$20.00", product: featuredProducts[0] },
-  { id: "#123457", date: "March 5, 2025", status: "Cancelled", amount: "$20.00", product: featuredProducts[1] },
-  { id: "#123458", date: "March 1, 2025", status: "Processing", amount: "$35.00", product: popularProducts[2] },
-];
+export const getProductReviews = (productId) => reviews.filter((review) => review.productId === productId);
+export const getProductById = (productId) => products.find((product) => product.id === productId) ?? null;
+export const getOrderById = (orderId) => orders.find((order) => order.id === orderId) ?? null;

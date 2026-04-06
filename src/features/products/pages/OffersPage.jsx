@@ -1,75 +1,32 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import ErrorState from "../../../components/feedback/ErrorState";
-import LoadingState from "../../../components/feedback/LoadingState";
 import PageSection from "../../../components/common/PageSection";
+import ProductCard from "../../../components/common/ProductCard";
+import LoadingState from "../../../components/feedback/LoadingState";
 import useAsyncData from "../../../hooks/useAsyncData";
-import { offerTabs } from "../../../data/mockStorefront";
 import { getOfferProducts } from "../services/productService";
-import { useCart } from "../../cart/hooks/useCart";
-import { useFavorites } from "../../favorites/hooks/useFavorites";
 
 function OffersPage() {
-  const [activeTab, setActiveTab] = useState(offerTabs[0]);
-  const { addToCart } = useCart();
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const request = useMemo(() => () => getOfferProducts(activeTab), [activeTab]);
-  const { data: offerProducts, loading, error, reload } = useAsyncData(request, [request]);
+  const { data, loading } = useAsyncData(getOfferProducts, []);
 
   return (
     <PageSection
       eyebrow="Offers"
-      title="Deals, tabs, and promotional collections from your original app"
-      subtitle="This restores the offers section in a website-friendly form with tabs and animated cards."
+      title="Conversion-focused promotions and deal discovery"
+      subtitle="Discount-led merchandising with clean badges, urgency cues, and premium spacing."
     >
-      <div className="offers-tabs">
-        {offerTabs.map((tab) => (
-          <button
-            key={tab}
-            className={`offer-tab${activeTab === tab ? " active" : ""}`}
-            type="button"
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
+      <div className="promo-banner-grid">
+        <article className="offer-hero-card">
+          <span className="badge badge-accent">Today only</span>
+          <h2>Save more on premium essentials.</h2>
+          <p>Curated offers across tech, wellness, home, and gifting.</p>
+        </article>
+        <article className="offer-hero-card muted">
+          <span className="badge">Members</span>
+          <h2>Extra perks for returning customers.</h2>
+          <p>Priority chat support, better delivery windows, and exclusive drops.</p>
+        </article>
       </div>
-      {loading ? <LoadingState label="Loading offers..." /> : null}
-      {error ? (
-        <ErrorState
-          title="Offers are temporarily unavailable"
-          description="The promotional cards could not be loaded."
-          onRetry={reload}
-        />
-      ) : null}
-      {offerProducts ? (
-        <div className="offer-list">
-          {offerProducts.map((product) => (
-            <article className="offer-card" key={`${activeTab}-${product.id}`}>
-              <img src={product.imageUrl} alt={product.name} />
-              <div className="offer-card-body">
-                <span className="offer-badge">{product.offerLabel}</span>
-                <Link className="product-title" to={`/product/${product.id}`}>
-                  {product.name}
-                </Link>
-                <p>{product.categoryName}</p>
-                <div className="price-row">
-                  <strong>${product.price.toFixed(2)}</strong>
-                  <span>{product.rating}★</span>
-                </div>
-                <div className="card-actions">
-                  <button className="button ghost small" type="button" onClick={() => toggleFavorite(product)}>
-                    {isFavorite(product.id) ? "Saved" : "Save"}
-                  </button>
-                  <button className="button primary small" type="button" onClick={() => addToCart(product, 1)}>
-                    Add
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : null}
+      {loading || !data ? <LoadingState label="Loading live offers..." /> : null}
+      {data ? <div className="product-grid">{data.map((product) => <ProductCard key={product.id} product={product} />)}</div> : null}
     </PageSection>
   );
 }

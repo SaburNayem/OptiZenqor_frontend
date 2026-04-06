@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 
-function SectionHeading({ eyebrow, title, link }) {
+function SectionHeading({ eyebrow, title, subtitle, link, linkLabel = "View all" }) {
   return (
     <div className="section-heading">
       <div>
-        <p className="eyebrow">{eyebrow}</p>
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
         <h2>{title}</h2>
+        {subtitle ? <p className="section-subtitle">{subtitle}</p> : null}
       </div>
-      <Link to={link}>View all</Link>
+      {link ? (
+        <Link className="section-link" to={link}>
+          {linkLabel}
+        </Link>
+      ) : null}
     </div>
   );
 }

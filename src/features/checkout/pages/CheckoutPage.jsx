@@ -1,169 +1,101 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EmptyState from "../../../components/feedback/EmptyState";
 import PageSection from "../../../components/common/PageSection";
+import { checkoutSteps } from "../../../constants/navigation";
+import { addresses, paymentMethods } from "../../../data/mockStorefront";
 import { useCart } from "../../cart/hooks/useCart";
 import { placeOrder } from "../services/checkoutService";
-import { isEmail, validateMinLength, validateRequired } from "../../../utils/validation";
-
-const initialForm = {
-  fullName: "",
-  email: "",
-  phone: "",
-  address: "",
-  city: "",
-  note: "",
-};
 
 function CheckoutPage() {
   const navigate = useNavigate();
   const { cart, subtotal, delivery, total, clearCart } = useCart();
-  const [placed, setPlaced] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState({});
+  const [selectedAddress, setSelectedAddress] = useState(addresses[0]?.id ?? "");
+  const [selectedShipping, setSelectedShipping] = useState("Express");
+  const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0]?.id ?? "");
+  const [placing, setPlacing] = useState(false);
 
-  const checkoutItems = useMemo(() => cart.map((item) => item.product.id), [cart]);
+  const chosenAddress = useMemo(
+    () => addresses.find((address) => address.id === selectedAddress) ?? addresses[0],
+    [selectedAddress],
+  );
 
-  function validateForm() {
-    const nextErrors = {};
-
-    if (!validateRequired(form.fullName)) nextErrors.fullName = "Full name is required.";
-    if (!isEmail(form.email)) nextErrors.email = "Enter a valid email address.";
-    if (!validateMinLength(form.phone, 7)) nextErrors.phone = "Enter a valid phone number.";
-    if (!validateMinLength(form.address, 8)) nextErrors.address = "Enter a fuller address.";
-    if (!validateRequired(form.city)) nextErrors.city = "City is required.";
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
-  }
-
-  async function submitOrder() {
-    if (!validateForm()) {
-      return;
-    }
-
-    setSubmitting(true);
-    await placeOrder({ ...form, items: cart });
-    setPlaced(true);
+  async function handlePlaceOrder() {
+    setPlacing(true);
+    await placeOrder({ cart, selectedAddress, selectedShipping, selectedPayment });
     clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    window.setTimeout(() => navigate("/"), 1200);
+    navigate("/orders");
   }
 
   return (
-    <PageSection
-      eyebrow="Checkout"
-      title="Secure checkout"
-      subtitle="Shipping, order recap, and payment summary in a website-style two-column layout."
-    >
-      {placed ? (
-        <div className="success-banner">
-          Order placed successfully. Your cart has been cleared and you are being sent back to the homepage.
-        </div>
-      ) : null}
+    <PageSection eyebrow="Checkout" title="Premium multi-step checkout" subtitle="Address, shipping, payment, and review surfaces tuned for speed and trust.">
+      <div className="checkout-steps">
+        {checkoutSteps.map((step, index) => (
+          <div key={step} className={`checkout-step${index === 3 ? " active" : ""}`}>
+            <span>{index + 1}</span>
+            <strong>{step}</strong>
+          </div>
+        ))}
+      </div>
+
       <div className="checkout-grid">
         <section className="summary-box">
-          <h3>Shipping Address</h3>
-          <label className="field">
-            <span>Full Name</span>
-            <input
-              type="text"
-              value={form.fullName}
-              onChange={(event) => setForm({ ...form, fullName: event.target.value })}
-            />
-            {errors.fullName ? <small className="field-error">{errors.fullName}</small> : null}
-          </label>
-          <label className="field">
-            <span>Email</span>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(event) => setForm({ ...form, email: event.target.value })}
-            />
-            {errors.email ? <small className="field-error">{errors.email}</small> : null}
-          </label>
-          <label className="field">
-            <span>Phone</span>
-            <input
-              type="tel"
-              value={form.phone}
-              onChange={(event) => setForm({ ...form, phone: event.target.value })}
-            />
-            {errors.phone ? <small className="field-error">{errors.phone}</small> : null}
-          </label>
-          <label className="field">
-            <span>Address</span>
-            <input
-              type="text"
-              value={form.address}
-              onChange={(event) => setForm({ ...form, address: event.target.value })}
-            />
-            {errors.address ? <small className="field-error">{errors.address}</small> : null}
-          </label>
-          <label className="field">
-            <span>City</span>
-            <input
-              type="text"
-              value={form.city}
-              onChange={(event) => setForm({ ...form, city: event.target.value })}
-            />
-            {errors.city ? <small className="field-error">{errors.city}</small> : null}
-          </label>
-          <label className="field">
-            <span>Delivery Note</span>
-            <input
-              type="text"
-              value={form.note}
-              onChange={(event) => setForm({ ...form, note: event.target.value })}
-            />
-          </label>
+          <div className="price-row"><h3>Delivery address</h3><button className="button ghost small" type="button">Add new</button></div>
+          <div className="address-grid">
+            {addresses.map((address) => (
+              <button key={address.id} className={`address-card${selectedAddress === address.id ? " active" : ""}`} type="button" onClick={() => setSelectedAddress(address.id)}>
+                <strong>{address.label}</strong>
+                <span>{address.name}</span>
+                <span>{address.line1}</span>
+                <span>{address.city}, {address.country}</span>
+                {address.primary ? <small>Default</small> : null}
+              </button>
+            ))}
+          </div>
         </section>
+
         <section className="summary-box">
-          <h3>Order Items</h3>
+          <h3>Shipping method</h3>
+          <div className="option-grid">
+            {["Express", "Standard", "Scheduled"].map((option) => (
+              <button key={option} className={`option-card${selectedShipping === option ? " active" : ""}`} type="button" onClick={() => setSelectedShipping(option)}>
+                <strong>{option}</strong>
+                <span>{option === "Express" ? "1-2 business days" : option === "Standard" ? "3-5 business days" : "Choose a preferred slot"}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="summary-box">
+          <div className="price-row"><h3>Payment method</h3><button className="button ghost small" type="button">Manage cards</button></div>
+          <div className="option-grid">
+            {paymentMethods.map((method) => (
+              <button key={method.id} className={`option-card${selectedPayment === method.id ? " active" : ""}`} type="button" onClick={() => setSelectedPayment(method.id)}>
+                <strong>{method.label}</strong>
+                <span>{method.expires}</span>
+              </button>
+            ))}
+          </div>
+          <div className="security-note">Secure checkout. Payment details are protected and can be saved for faster reorder flow.</div>
+        </section>
+
+        <aside className="summary-box sticky-summary">
+          <h3>Order summary</h3>
           <div className="list-stack compact">
-            {cart.length === 0 ? (
-              <EmptyState
-                title="Cart required for checkout"
-                description="Add at least one product before placing an order."
-                action={{ label: "Return to shop", to: "/shop" }}
-              />
-            ) : (
-              cart.map((item) => (
-                <div className="price-row" key={item.product.id}>
-                  <span>
-                    {item.product.name} x{item.quantity}
-                  </span>
-                  <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
-                </div>
-              ))
-            )}
+            {cart.map((item) => (
+              <div className="price-row" key={item.product.id}>
+                <span>{item.product.name} x{item.quantity}</span>
+                <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
+              </div>
+            ))}
           </div>
-        </section>
-        <section className="summary-box">
-          <h3>Payment Summary</h3>
-          <div className="price-row">
-            <span>Subtotal</span>
-            <strong>${subtotal.toFixed(2)}</strong>
-          </div>
-          <div className="price-row">
-            <span>Delivery</span>
-            <strong>${delivery.toFixed(2)}</strong>
-          </div>
-          <div className="price-row total-row">
-            <span>Total</span>
-            <strong>${total.toFixed(2)}</strong>
-          </div>
-          <p className="section-subtitle">Items ready for order: {checkoutItems.length}</p>
-          <button
-            className="button primary full-width"
-            type="button"
-            disabled={cart.length === 0 || submitting}
-            onClick={submitOrder}
-          >
-            {submitting ? "Placing Order..." : "Place Order"}
+          <div className="price-row"><span>Ship to</span><strong>{chosenAddress?.label}</strong></div>
+          <div className="price-row"><span>Subtotal</span><strong>${subtotal.toFixed(2)}</strong></div>
+          <div className="price-row"><span>Shipping</span><strong>${delivery.toFixed(2)}</strong></div>
+          <div className="price-row total-row"><span>Total</span><strong>${total.toFixed(2)}</strong></div>
+          <button className="button primary full-width" type="button" onClick={handlePlaceOrder} disabled={!cart.length || placing}>
+            {placing ? "Placing order..." : "Place order"}
           </button>
-        </section>
+        </aside>
       </div>
     </PageSection>
   );

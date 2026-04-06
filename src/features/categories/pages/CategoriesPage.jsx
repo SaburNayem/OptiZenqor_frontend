@@ -1,34 +1,27 @@
 import { Link } from "react-router-dom";
-import ErrorState from "../../../components/feedback/ErrorState";
-import LoadingState from "../../../components/feedback/LoadingState";
 import PageSection from "../../../components/common/PageSection";
+import LoadingState from "../../../components/feedback/LoadingState";
 import useAsyncData from "../../../hooks/useAsyncData";
 import { getCategories } from "../services/categoryService";
 
 function CategoriesPage() {
-  const { data: categories, loading, error, reload } = useAsyncData(getCategories, []);
+  const { data, loading } = useAsyncData(getCategories, []);
 
   return (
     <PageSection
-      eyebrow="Collections"
-      title="Browse the store by category"
-      subtitle="Large collection tiles create a more natural website discovery flow."
+      eyebrow="Categories"
+      title="Browse every major shopping module from a single clean hub"
+      subtitle="Built as a scalable category landing page with visual hierarchy and quick access."
     >
-      {loading ? <LoadingState label="Loading categories..." /> : null}
-      {error ? (
-        <ErrorState
-          title="Categories are unavailable"
-          description="The collection list could not be loaded."
-          onRetry={reload}
-        />
-      ) : null}
-      {categories ? (
+      {loading || !data ? <LoadingState label="Loading categories..." /> : null}
+      {data ? (
         <div className="category-grid">
-          {categories.map((category) => (
+          {data.map((category) => (
             <Link key={category.id} className="category-tile large" to={`/categories/${category.id}`}>
-              <span className="category-icon">{category.name.charAt(0)}</span>
-              <strong>{category.bannerTitle}</strong>
-              <small>View products</small>
+              <span className="category-icon" style={{ background: category.accent }}>{category.name.slice(0, 1)}</span>
+              <strong>{category.name}</strong>
+              <p>{category.description}</p>
+              <small>{category.subcategories.join(" · ")}</small>
             </Link>
           ))}
         </div>

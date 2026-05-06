@@ -5,6 +5,10 @@ import ProductCard from "../../../components/common/ProductCard";
 import EmptyState from "../../../components/feedback/EmptyState";
 import ErrorState from "../../../components/feedback/ErrorState";
 import LoadingState from "../../../components/feedback/LoadingState";
+<<<<<<< HEAD
+=======
+import { categories } from "../../../data/mockStorefront";
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
 import useAsyncData from "../../../hooks/useAsyncData";
 import { getCategories } from "../../categories/services/categoryService";
 import { searchProducts } from "../services/productService";
@@ -20,7 +24,10 @@ function ShopPage() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [tab, setTab] = useState("all");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+<<<<<<< HEAD
   const { data: categoryOptions } = useAsyncData(getCategories, []);
+=======
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
 
   useEffect(() => setQuery(initialQuery), [initialQuery]);
 
@@ -50,7 +57,11 @@ function ShopPage() {
         <span>Category</span>
         <select value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
           <option value="all">All categories</option>
+<<<<<<< HEAD
           {(categoryOptions || []).map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+=======
+          {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
         </select>
       </label>
       <label className="field">
@@ -60,8 +71,13 @@ function ShopPage() {
         </select>
       </label>
       <label className="field">
+<<<<<<< HEAD
         <span>Max price: BDT {maxPrice}</span>
         <input type="range" min="500" max="10000" step="100" value={maxPrice} onChange={(event) => setMaxPrice(Number(event.target.value))} />
+=======
+        <span>Max price: ${maxPrice}</span>
+        <input type="range" min="20" max="2000" step="10" value={maxPrice} onChange={(event) => setMaxPrice(Number(event.target.value))} />
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
       </label>
     </>
   );

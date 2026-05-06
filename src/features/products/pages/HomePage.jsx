@@ -79,8 +79,13 @@ function HomePage() {
               <h1>{currentSlide.title}</h1>
               <p className="hero-text">{currentSlide.description}</p>
               <div className="price-stack large">
+<<<<<<< HEAD
                 <strong>{`BDT ${Number(currentSlide.price || 0).toLocaleString()}`}</strong>
                 <span>{`BDT ${Number(currentSlide.compareAtPrice || 0).toLocaleString()}`}</span>
+=======
+                <strong>${currentSlide.price.toFixed(2)}</strong>
+                <span>${currentSlide.compareAtPrice.toFixed(2)}</span>
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
               </div>
               <div className="hero-cta">
                 <Link className="button primary" to={currentSlide.link}>Shop now</Link>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { recentSearches, testimonials, trendingSearches } from "../../../data/mockStorefront";
 import { apiRequest } from "../../../services/apiClient";
 
@@ -93,16 +94,44 @@ export async function getHomePageCollections() {
   };
 }
 
+=======
+import {
+  categories,
+  getProductById as getProductByIdFromStore,
+  getProductReviews,
+  homeCollections,
+  products,
+  recentSearches,
+  testimonials,
+  trendingSearches,
+} from "../../../data/mockStorefront";
+import { resolveWithLatency } from "../../../services/serviceUtils";
+
+export async function getHomePageCollections() {
+  return resolveWithLatency({
+    categories,
+    testimonials,
+    ...homeCollections,
+  });
+}
+
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
 export async function searchProducts({
   query = "",
   sort = "featured",
   minRating = 0,
   categoryId = "all",
+<<<<<<< HEAD
   maxPrice = 500000,
   tab = "all",
 } = {}) {
   const products = (await apiRequest("/products")).map(mapProduct);
 
+=======
+  maxPrice = 2000,
+  tab = "all",
+} = {}) {
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
   let next = products.filter((product) =>
     `${product.name} ${product.categoryName} ${product.tags.join(" ")}`
       .toLowerCase()
@@ -141,6 +170,7 @@ export async function searchProducts({
 }
 
 export async function getProductById(productId) {
+<<<<<<< HEAD
   try {
     const product = mapProduct(await apiRequest(`/products/${productId}`));
     const products = (await apiRequest("/products")).map(mapProduct);
@@ -186,4 +216,38 @@ export async function getSearchExperience(query = "") {
     recentSearches,
     trendingSearches,
   };
+=======
+  const product = getProductByIdFromStore(productId);
+  if (!product) return resolveWithLatency(null);
+
+  const relatedProducts = products
+    .filter((item) => item.categoryId === product.categoryId && item.id !== product.id)
+    .slice(0, 4);
+  const recentlyViewed = products.filter((item) => item.id !== product.id).slice(0, 4);
+
+  return resolveWithLatency({
+    product,
+    reviews: getProductReviews(productId),
+    relatedProducts,
+    recentlyViewed,
+  });
+}
+
+export async function getOfferProducts() {
+  return resolveWithLatency(
+    [...products]
+      .sort((a, b) => (b.compareAtPrice - b.price) - (a.compareAtPrice - a.price))
+      .slice(0, 8),
+  );
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
+}
+
+export async function getSearchExperience(query = "") {
+  const result = await searchProducts({ query });
+  return resolveWithLatency({
+    query,
+    results: result,
+    recentSearches,
+    trendingSearches,
+  });
 }

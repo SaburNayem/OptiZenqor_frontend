@@ -13,7 +13,10 @@ function AuthPage({ mode }) {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+<<<<<<< HEAD
   const [status, setStatus] = useState("");
+=======
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
   const [form, setForm] = useState({ name: "", email: "", password: "", code: "", confirmPassword: "" });
   const [errors, setErrors] = useState({});
 
@@ -27,7 +30,11 @@ function AuthPage({ mode }) {
 
   const active = config[mode] ?? config["sign-in"];
 
+<<<<<<< HEAD
   async function submit(event) {
+=======
+  function submit(event) {
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
     event.preventDefault();
     const nextErrors = {};
     if (mode === "sign-up" && !validateRequired(form.name)) nextErrors.name = "Full name is required.";
@@ -37,6 +44,7 @@ function AuthPage({ mode }) {
     if (mode === "reset-password" && form.confirmPassword !== form.password) nextErrors.confirmPassword = "Passwords must match.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
+<<<<<<< HEAD
 
     try {
       setStatus("Working on your request...");
@@ -83,6 +91,10 @@ function AuthPage({ mode }) {
       setSubmitted(false);
       setStatus(error.message || "Something went wrong.");
     }
+=======
+    setSubmitted(true);
+    window.setTimeout(() => navigate(mode === "forgot-password" ? "/verify-code" : mode === "verify-code" ? "/reset-password" : "/account"), 500);
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
   }
 
   return (
@@ -101,8 +113,12 @@ function AuthPage({ mode }) {
 
         <form className="auth-panel" onSubmit={submit}>
           <h2>{active.title}</h2>
+<<<<<<< HEAD
           {submitted ? <div className="success-banner">{status || "Looks good. Redirecting to the next step."}</div> : null}
           {!submitted && status ? <small className="field-error">{status}</small> : null}
+=======
+          {submitted ? <div className="success-banner">Looks good. Redirecting to the next step.</div> : null}
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
           {mode === "sign-up" ? (
             <label className="field">
               <span>Full name</span>
@@ -110,7 +126,11 @@ function AuthPage({ mode }) {
               {errors.name ? <small className="field-error">{errors.name}</small> : null}
             </label>
           ) : null}
+<<<<<<< HEAD
           {["sign-in", "sign-up", "forgot-password", "verify-code", "reset-password"].includes(mode) ? (
+=======
+          {["sign-in", "sign-up", "forgot-password"].includes(mode) ? (
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
             <label className="field">
               <span>Email</span>
               <input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} />
@@ -127,7 +147,11 @@ function AuthPage({ mode }) {
               {errors.password ? <small className="field-error">{errors.password}</small> : null}
             </label>
           ) : null}
+<<<<<<< HEAD
           {["verify-code", "reset-password"].includes(mode) ? (
+=======
+          {mode === "verify-code" ? (
+>>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
             <label className="field">
               <span>Verification code</span>
               <input type="text" value={form.code} onChange={(event) => setForm({ ...form, code: event.target.value })} />

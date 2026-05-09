@@ -79,13 +79,8 @@ function HomePage() {
               <h1>{currentSlide.title}</h1>
               <p className="hero-text">{currentSlide.description}</p>
               <div className="price-stack large">
-<<<<<<< HEAD
                 <strong>{`BDT ${Number(currentSlide.price || 0).toLocaleString()}`}</strong>
                 <span>{`BDT ${Number(currentSlide.compareAtPrice || 0).toLocaleString()}`}</span>
-=======
-                <strong>${currentSlide.price.toFixed(2)}</strong>
-                <span>${currentSlide.compareAtPrice.toFixed(2)}</span>
->>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
               </div>
               <div className="hero-cta">
                 <Link className="button primary" to={currentSlide.link}>Shop now</Link>
@@ -198,7 +193,7 @@ function HomePage() {
           <div className="editorial-grid">
             {testimonials.map((testimonial) => (
               <article key={testimonial.id} className="review-card">
-                <div className="rating-row"><span>â˜…â˜…â˜…â˜…â˜…</span><small>{testimonial.role}</small></div>
+                <div className="rating-row"><span>★★★★★</span><small>{testimonial.role}</small></div>
                 <p>{testimonial.quote}</p>
                 <strong>{testimonial.name}</strong>
               </article>

@@ -1,23 +1,42 @@
-import { createContext, useMemo, useState } from "react";
-import { favoriteSeed } from "../../../data/mockStorefront";
-import { STORAGE_KEYS } from "../../../constants/storageKeys";
-import usePersistentState from "../../../hooks/usePersistentState";
+import { createContext, useEffect, useMemo, useState } from "react";
+import { apiRequest, getAccessToken } from "../../../services/apiClient";
+import { mapProduct } from "../../products/services/productService";
 
 export const FavoritesContext = createContext(null);
 
 export function FavoritesProvider({ children }) {
-  const [favorites, setFavorites] = usePersistentState(STORAGE_KEYS.favorites, favoriteSeed);
+  const [favorites, setFavorites] = useState([]);
   const [lastUpdatedId, setLastUpdatedId] = useState(null);
 
-  function toggleFavorite(product) {
-    setFavorites((current) => {
-      const exists = current.some((item) => item.id === product.id);
-      const nextFavorites = exists
-        ? current.filter((item) => item.id !== product.id)
-        : [...current, product];
-      setLastUpdatedId(product.id);
-      return nextFavorites;
-    });
+  async function loadFavorites() {
+    if (!getAccessToken()) {
+      setFavorites([]);
+      return;
+    }
+
+    try {
+      const result = await apiRequest("/favorites");
+      setFavorites(result.map((item) => mapProduct(item.product)));
+    } catch {
+      setFavorites([]);
+    }
+  }
+
+  useEffect(() => {
+    loadFavorites();
+  }, []);
+
+  async function toggleFavorite(product) {
+    const exists = favorites.some((item) => item.id === product.id);
+
+    if (exists) {
+      await apiRequest(`/favorites/${product.id}`, { method: "DELETE" });
+    } else {
+      await apiRequest(`/favorites/${product.id}`, { method: "POST" });
+    }
+
+    setLastUpdatedId(product.id);
+    await loadFavorites();
   }
 
   const value = useMemo(
@@ -28,9 +47,13 @@ export function FavoritesProvider({ children }) {
       lastUpdatedId,
       isFavorite: (productId) => favorites.some((item) => item.id === productId),
       toggleFavorite,
-      clearFavorites: () => setFavorites([]),
+      clearFavorites: async () => {
+        await Promise.all(favorites.map((item) => apiRequest(`/favorites/${item.id}`, { method: "DELETE" })));
+        await loadFavorites();
+      },
+      reloadFavorites: loadFavorites,
     }),
-    [favorites, lastUpdatedId, setFavorites],
+    [favorites, lastUpdatedId],
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;

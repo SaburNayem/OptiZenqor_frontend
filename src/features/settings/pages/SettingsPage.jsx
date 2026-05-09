@@ -1,7 +1,20 @@
 import PageSection from "../../../components/common/PageSection";
-import { settings } from "../../../data/mockStorefront";
+import LoadingState from "../../../components/feedback/LoadingState";
+import useAsyncData from "../../../hooks/useAsyncData";
+import { getAccountOverview } from "../../../services/accountService";
 
 function SettingsPage() {
+  const { data, loading } = useAsyncData(getAccountOverview, []);
+  const settings = data?.settings;
+
+  if (loading || !settings) {
+    return (
+      <PageSection eyebrow="Settings" title="Loading settings" subtitle="Preparing account and storefront preferences.">
+        <LoadingState label="Loading settings..." />
+      </PageSection>
+    );
+  }
+
   return (
     <PageSection eyebrow="Settings" title="Grouped settings for notifications, privacy, language, and devices" subtitle="A mobile-friendly settings interface with clear hierarchy and production-style controls.">
       <div className="settings-grid">

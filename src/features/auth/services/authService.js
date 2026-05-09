@@ -1,6 +1,4 @@
-import { apiRequest } from "../../../services/apiClient";
-
-const SESSION_KEY = "optizenqor_frontend_session";
+import { apiRequest, clearStoredSession, setStoredSession } from "../../../services/apiClient";
 
 export async function signIn(payload) {
   const result = await apiRequest("/auth/login", {
@@ -11,7 +9,7 @@ export async function signIn(payload) {
     }),
   });
 
-  window.localStorage.setItem(SESSION_KEY, JSON.stringify(result));
+  setStoredSession(result);
   return result;
 }
 
@@ -26,7 +24,7 @@ export async function signUp(payload) {
     }),
   });
 
-  window.localStorage.setItem(SESSION_KEY, JSON.stringify(result));
+  setStoredSession(result);
   return result;
 }
 
@@ -49,4 +47,8 @@ export async function resetPassword(email, code, newPassword) {
     method: "POST",
     body: JSON.stringify({ email, code, newPassword }),
   });
+}
+
+export function signOut() {
+  clearStoredSession();
 }

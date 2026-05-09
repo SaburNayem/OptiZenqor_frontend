@@ -1,8 +1,16 @@
-import { resolveWithLatency } from "../../../services/serviceUtils";
+import { apiRequest } from "../../../services/apiClient";
+import { mapOrder } from "../../orders/services/orderService";
 
 export async function placeOrder(payload) {
-  return resolveWithLatency({
-    orderId: `MOCK-${Date.now()}`,
-    payload,
-  }, 180);
+  const order = await apiRequest("/orders/checkout", {
+    method: "POST",
+    body: JSON.stringify({
+      addressId: payload.addressId,
+      deliveryFee: payload.deliveryFee,
+      notes: payload.notes,
+      currency: "BDT",
+    }),
+  });
+
+  return mapOrder(order);
 }

@@ -58,21 +58,12 @@ function ProductPage() {
             <span className={`badge badge-stock ${product.stockState}`}>{product.stockState.replace("-", " ")}</span>
           </div>
           <div className="rating-row">
-<<<<<<< HEAD
             <span>Top rated</span>
             <small>{product.rating} rating · {product.reviewCount} reviews</small>
           </div>
           <div className="price-stack large">
             <strong>{`BDT ${Number(product.price || 0).toLocaleString()}`}</strong>
             <span>{`BDT ${Number(product.compareAtPrice || 0).toLocaleString()}`}</span>
-=======
-            <span>★★★★★</span>
-            <small>{product.rating} rating · {product.reviewCount} reviews</small>
-          </div>
-          <div className="price-stack large">
-            <strong>${product.price.toFixed(2)}</strong>
-            <span>${product.compareAtPrice.toFixed(2)}</span>
->>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
           </div>
           <p className="section-subtitle">{product.description}</p>
           <div className="chip-row">
@@ -152,11 +143,7 @@ function ProductPage() {
                     <strong>{review.title}</strong>
                     <span>{review.date}</span>
                   </div>
-<<<<<<< HEAD
                   <div className="rating-row"><span>{`${review.rating}/5`}</span><small>{review.author} {review.verified ? "· Verified" : ""}</small></div>
-=======
-                  <div className="rating-row"><span>{"★".repeat(review.rating)}</span><small>{review.author} {review.verified ? "· Verified" : ""}</small></div>
->>>>>>> 76c39d318260a223b65d88e39d8d2933dcaa0cfe
                   <p>{review.body}</p>
                   {review.reply ? <div className="support-reply"><strong>Support reply</strong><p>{review.reply}</p></div> : null}
                 </article>
